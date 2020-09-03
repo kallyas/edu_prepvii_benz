@@ -1,8 +1,7 @@
 FROM gitpod/workspace-full
 USER gitpod
 
-RUN sudo apt-get update && \
-    sudo apt-get upgrade
+RUN sudo apt-get update
 
 # set the zsh theme 
 ENV ZSH_THEME cloud
