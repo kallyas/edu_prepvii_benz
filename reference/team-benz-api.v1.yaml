@@ -1,0 +1,707 @@
+openapi: 3.0.0
+info:
+  title: Team-benz-api
+  version: '1.0'
+  license:
+    name: MIT
+    url: 'https://github.com/outboxafrica/edu_prepvii_benz/blob/master/LICENSE'
+  contact:
+    name: Team Benz
+    url: 'https://github.com/outboxafrica/edu_prepvii_benz'
+  description: EDU-API is for the EDU Q&A platform where people can ask questions andprovide responses.
+servers:
+  - url: 'https://api-team-benz.herokuapp.com/api/v1'
+paths:
+  /users:
+    get:
+      summary: Get All Users
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+      operationId: get-users
+      description: Gets All users in the Application
+    parameters: []
+  /auth/signup:
+    post:
+      summary: Create a New User
+      operationId: post-auth-signup
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+              examples: {}
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      description: |
+        Creates a New User Into the Application
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+            examples:
+              example-1:
+                value:
+                  username: username
+                  email: user@email.com
+                  password: password
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: User body
+  /auth/login:
+    post:
+      summary: Login a User
+      operationId: post-auth-login
+      responses:
+        '200':
+          description: OK
+      description: Login a User
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-access-token
+          description: access token
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+  '/user/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+    get:
+      summary: get a user by Id
+      operationId: get-user-user-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example:
+                  value: {}
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      description: |-
+        Get a User By their Id
+        This endpoint get's a user By their ID
+    put:
+      summary: Update a user
+      operationId: put-user-user-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: User Updated SucessFully
+            application/javascript:
+              schema:
+                type: object
+                properties: {}
+      description: Update a User of a Specified USer Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+        description: User defines the body vaules to be updated
+    delete:
+      summary: Delete a user by Id
+      operationId: delete-user-user-id
+      responses:
+        '200':
+          description: User deleted Sucessfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: User deleted Sucessfully
+      description: Delete A user by their ID
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: user Id
+          description: User Id
+          required: true
+  /questions:
+    get:
+      summary: get all questions
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+              examples:
+                example:
+                  value:
+                    - null
+      operationId: get-questions
+      description: get all questions
+    post:
+      summary: Post a question
+      operationId: post-questions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: question created successfully
+      description: create a new question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question:
+                  type: string
+                postedBy:
+                  $ref: '#/components/schemas/User'
+                upVote:
+                  type: number
+                downVote:
+                  type: number
+        description: question body
+  '/questions/{questionId}':
+    parameters:
+      - schema:
+          type: string
+        name: questionId
+        in: path
+        required: true
+        description: question Id
+    get:
+      summary: Get a question By Id
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                example:
+                  value: {}
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      operationId: get-questions-questionId
+      description: Get a question by Id
+    put:
+      summary: Update a question
+      operationId: put-questions-questionId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: question Updated Successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      description: Update a question by Id
+    delete:
+      summary: Delete a Question
+      operationId: delete-questions-questionId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: question deleted Successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      description: delete question by Id
+  '/questions/{questionId}/answer':
+    parameters:
+      - schema:
+          type: string
+        name: questionId
+        in: path
+        required: true
+        description: |
+          question id
+    post:
+      summary: Post an answer to a question
+      operationId: post-questions-questionId-answer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: Answer created Sucessfully
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: question created successfully
+      description: Create an aswer to a given question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answer:
+                  type: string
+                answeredBy:
+                  $ref: '#/components/schemas/User'
+                questionId:
+                  $ref: '#/components/schemas/Questions'
+                upVote:
+                  type: number
+                downVote:
+                  type: number
+              required:
+                - answer
+                - answeredBy
+                - questionId
+        description: answer body
+  /answers:
+    get:
+      summary: get all answers
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+              examples:
+                example:
+                  value:
+                    - null
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-answers
+      description: Get all answers
+  '/questions/{questionId}/answer/{answerId}':
+    parameters:
+      - schema:
+          type: string
+        name: questionId
+        in: path
+        required: true
+        description: question Id
+      - schema:
+          type: string
+        name: answerId
+        in: path
+        required: true
+        description: Answer Id
+    put:
+      summary: Update an answer
+      operationId: put-questions-questionId-answer-answerId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: Answer updated Successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Update an answer to a particular question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answer:
+                  type: string
+                answeredBy:
+                  $ref: '#/components/schemas/User'
+                questionId:
+                  $ref: '#/components/schemas/Questions'
+                upVote:
+                  type: number
+                downVote:
+                  type: number
+            examples:
+              example:
+                value:
+                  answer: string
+                  answeredBy:
+                    id: string
+                    username: string
+                    password: string
+                    questions:
+                      - null
+                    answers:
+                      - null
+                    email: string
+                  questionId:
+                    id: string
+                    question: string
+                    postedBy:
+                      id: string
+                      username: string
+                      password: string
+                      questions:
+                        - null
+                      answers:
+                        - null
+                      email: string
+                    upVote: 0
+                    downVote: 0
+                  upVote: 0
+                  downVote: 0
+        description: user defines what to update
+    delete:
+      summary: Delete An answer
+      operationId: delete-questions-questionId-answer-answerId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example:
+                  value:
+                    message: answer deleted
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '501':
+          description: Not Implemented
+      description: Delete an answer to a given question
+    get:
+      summary: get an answer by Id
+      operationId: get-questions-questionId-answer-answerId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example:
+                  value: {}
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '501':
+          description: Not Implemented
+      description: get an answer to a given question
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        questions:
+          type: array
+          items: {}
+        answers:
+          type: array
+          items: {}
+        email:
+          type: string
+      required:
+        - id
+        - username
+        - password
+        - email
+      x-examples:
+        example-1:
+          id: string
+          username: string
+          password: string
+          questions:
+            - null
+          answers:
+            - null
+          email: string
+      description: User Model
+    Questions:
+      title: Question Schema
+      type: object
+      x-tags:
+        - question Model
+      description: Question Model
+      x-examples:
+        example-1:
+          id: string
+          question: string
+          postedBy:
+            id: string
+            username: string
+            password: string
+            questions:
+              - null
+            answers:
+              - null
+            email: string
+          upVotes: 0
+          downVotes: 0
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        postedBy:
+          $ref: '#/components/schemas/User'
+        upVote:
+          type: number
+        downVote:
+          type: number
+      required:
+        - id
+        - question
+        - postedBy
+    Answers:
+      title: Answers Schema
+      type: object
+      properties:
+        id:
+          type: string
+        answer:
+          type: string
+        answeredBy:
+          $ref: '#/components/schemas/User'
+        questionId:
+          $ref: '#/components/schemas/Questions'
+        upVote:
+          type: number
+        downVote:
+          type: number
+      x-examples:
+        example:
+          id: string
+          answer: string
+          answeredBy:
+            id: string
+            username: string
+            password: string
+            questions:
+              - null
+            answers:
+              - null
+            email: string
+          questionId:
+            id: string
+            question: string
+            postedBy:
+              id: string
+              username: string
+              password: string
+              questions:
+                - null
+              answers:
+                - null
+              email: string
+            upVote: 0
+            downVote: 0
+          upVote: 0
+          downVote: 0
+      description: Answer Model
+tags: []
