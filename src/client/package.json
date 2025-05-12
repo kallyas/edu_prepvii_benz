@@ -26,7 +26,7 @@
     "react-dom": "^16.14.0",
     "react-tagsinput": "^3.19.0",
     "slug": "^3.5.2",
-    "yup": "^0.32.11"
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
